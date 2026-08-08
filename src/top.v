@@ -473,8 +473,10 @@ module top
     wire mapper_port_read;
     wire [7:0] cd_in;
     wire memory_wait_n = module_sequence_done &&
-                         startup_test_wait_n && flash_rom_wait_n &&
-                         smr_wait_n && linear_wait_n && mapper_wait_n;
+                         startup_test_wait_n && flash_rom_wait_n;
+    //wire memory_wait_n = module_sequence_done &&
+    //                     startup_test_wait_n && flash_rom_wait_n &&
+    //                     smr_wait_n && linear_wait_n && mapper_wait_n;
 
     wire sdrc_cmd_en;
     wire [2:0] sdrc_cmd;
@@ -1853,9 +1855,8 @@ module top
         .enabled(native_sdram_enabled)
     );
 
-    // This older board has no interrupt inverter transistor. Emulate its
-    // open-collector output by pulling cartridge /INT low only while asserted
-    // and releasing the shared line otherwise.
+    // This older board has no interrupt inverter transistor, so drive the
+    // active-low cartridge /INT signal directly from the active-low sources.
     assign int_n =
         (sms_reset_n ? sms_vdp_irq_n : 1'b1) &&
         (opll_module_reset_n ? jt51_irq_n : 1'b1);
