@@ -805,7 +805,10 @@ int main(void)
                     *((uchar*)0x8000) == 'A' &&
                     *((uchar*)0x8001) == 'B')
                 {
-                    if (!linearHeaderValid)
+                    if (!presAB)
+                        *((uchar*)0x8000) = 0; // remove AB header from image
+
+                        if (!linearHeaderValid)
                     {
                         linearHeaderValid = TRUE;
                         linearRomstart = *((uint*)0x8002);
@@ -854,18 +857,6 @@ int main(void)
         if (headerValid)
             loadpage = (uchar)((romstart >> 13) & 0xFE);
     }
-
-    // LINEAR exposes the ROM image verbatim at its 16 KiB page base: the
-    // init address is a jump target, not a file offset. Preserve its AB
-    // header. Retain the legacy header removal only for banked MegaROMs.
-    //if (!presAB && megaram_type != TYPE_LINEAR)
-    //{
-    //    MEGA_PORT0 = 0;
-    //    *((uchar*)0x4000) = 0;
-    //    b = MEGA_PORT0; (b);
-    //    *((uchar*)0x4000) = 0;
-    //    MEGA_PORT0 = 0;
-    //}
 
     if (megaram_type == TYPE_LINEAR)
     {
