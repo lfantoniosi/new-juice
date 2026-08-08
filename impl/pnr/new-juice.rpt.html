@@ -83,7 +83,7 @@ table.detail_table th.label {  min-width: 8%; width: 8%; }
 </tr>
 <tr>
 <td class="label">Created Time</td>
-<td>Sat Aug  8 11:45:29 2026
+<td>Sat Aug  8 11:53:45 2026
 </td>
 </tr>
 <tr>
@@ -97,24 +97,24 @@ table.detail_table th.label {  min-width: 8%; width: 8%; }
 <tr>
 <td class="label">Place & Route Process</td>
 <td>Running placement:
-   Placement Phase 0: CPU time = 0h 0m 0.832s, Elapsed time = 0h 0m 0.832s
-   Placement Phase 1: CPU time = 0h 0m 0.145s, Elapsed time = 0h 0m 0.145s
+   Placement Phase 0: CPU time = 0h 0m 0.837s, Elapsed time = 0h 0m 0.838s
+   Placement Phase 1: CPU time = 0h 0m 0.137s, Elapsed time = 0h 0m 0.137s
    Placement Phase 2: CPU time = 0h 0m 2s, Elapsed time = 0h 0m 2s
-   Placement Phase 3: CPU time = 0h 0m 9s, Elapsed time = 0h 0m 9s
+   Placement Phase 3: CPU time = 0h 0m 8s, Elapsed time = 0h 0m 8s
    Total Placement: CPU time = 0h 0m 12s, Elapsed time = 0h 0m 12s
 Running routing:
    Routing Phase 0: CPU time = 0h 0m 0.002s, Elapsed time = 0h 0m 0.002s
-   Routing Phase 1: CPU time = 0h 0m 0.156s, Elapsed time = 0h 0m 0.156s
-   Routing Phase 2: CPU time = 0h 0m 45s, Elapsed time = 0h 0m 45s
+   Routing Phase 1: CPU time = 0h 0m 0.157s, Elapsed time = 0h 0m 0.157s
+   Routing Phase 2: CPU time = 0h 0m 27s, Elapsed time = 0h 0m 27s
    Routing Phase 3: CPU time = 0h 0m 0s, Elapsed time = 0h 0m 0s
-   Total Routing: CPU time = 0h 0m 45s, Elapsed time = 0h 0m 45s
+   Total Routing: CPU time = 0h 0m 27s, Elapsed time = 0h 0m 27s
 Generate output files:
-   CPU time = 0h 0m 0.754s, Elapsed time = 0h 0m 0.756s
+   CPU time = 0h 0m 0.788s, Elapsed time = 0h 0m 0.791s
 </td>
 </tr>
 <tr>
 <td class="label">Total Time and Memory Usage</td>
-<td>CPU time = 0h 0m 58s, Elapsed time = 0h 0m 58s, Peak memory usage = 579MB</td>
+<td>CPU time = 0h 0m 39s, Elapsed time = 0h 0m 39s, Peak memory usage = 582MB</td>
 </tr>
 </table>
 <br/>
@@ -129,12 +129,12 @@ Generate output files:
 </tr>
 <tr>
 <td class="label">Logic</td>
-<td>12565/20736</td>
-<td>61%</td>
+<td>12764/20736</td>
+<td>62%</td>
 </tr>
 <tr>
 <td class="label">&nbsp &nbsp --LUT,ALU,ROM16</td>
-<td>12019(10718 LUT, 1301 ALU, 0 ROM16)</td>
+<td>12218(10916 LUT, 1302 ALU, 0 ROM16)</td>
 <td>-</td>
 </tr>
 <tr>
@@ -169,7 +169,7 @@ Generate output files:
 </tr>
 <tr>
 <td class="label">CLS</td>
-<td>8964/10368</td>
+<td>8961/10368</td>
 <td>87%</td>
 </tr>
 <tr>
@@ -232,11 +232,11 @@ Generate output files:
 </tr>
 <tr>
 <td class="label">bank 3</td>
-<td>14/17</td><td>83%</td>
+<td>13/17</td><td>77%</td>
 </tr>
 <tr>
 <td class="label">bank 4</td>
-<td>7/8</td><td>88%</td>
+<td>8/8</td><td>100%</td>
 </tr>
 <tr>
 <td class="label">bank 5</td>
@@ -319,7 +319,7 @@ Generate output files:
 <td> -</td>
 </tr>
 <tr>
-<td class="label">psg_filter_history[0]_ER_init_374</td>
+<td class="label">psg_filter_history[0]_ER_init_353</td>
 <td>LW</td>
 <td> -</td>
 </tr>
@@ -1400,10 +1400,10 @@ Generate output files:
 <tr>
 <td class="label">audio</td>
 <td>-</td>
-<td>49/3</td>
+<td>41/4</td>
 <td>Y</td>
 <td>out</td>
-<td>IOR49[A]</td>
+<td>IOB43[A]</td>
 <td>-</td>
 <td>LVCMOS33</td>
 <td>4</td>
@@ -1412,18 +1412,18 @@ Generate output files:
 <td>NA</td>
 <td>OFF</td>
 <td>NA</td>
-<td>OFF</td>
+<td>NA</td>
 <td>NA</td>
 <td>3.3</td>
 </tr>
 <tr>
 <td class="label">sound</td>
 <td>-</td>
-<td>53/3</td>
+<td>49/3</td>
 <td>Y</td>
 <td>out</td>
-<td>IOR38[B]</td>
-<td>DOUT/WE_N</td>
+<td>IOR49[A]</td>
+<td>-</td>
 <td>LVCMOS33</td>
 <td>4</td>
 <td>DOWN</td>
@@ -2910,16 +2910,16 @@ Generate output files:
 </tr>
 <tr>
 <td class="label">41/4</td>
-<td>-</td>
-<td>in</td>
+<td>audio</td>
+<td>out</td>
 <td>IOB43[A]</td>
 <td>-</td>
 <td>LVCMOS33</td>
+<td>4</td>
+<td>DOWN</td>
 <td>NA</td>
-<td>UP</td>
-<td>ON</td>
-<td>NONE</td>
 <td>NA</td>
+<td>OFF</td>
 <td>NA</td>
 <td>NA</td>
 <td>NA</td>
@@ -4270,18 +4270,18 @@ Generate output files:
 </tr>
 <tr>
 <td class="label">53/3</td>
-<td>sound</td>
-<td>out</td>
+<td>-</td>
+<td>in</td>
 <td>IOR38[B]</td>
 <td>DOUT/WE_N</td>
 <td>LVCMOS33</td>
-<td>4</td>
-<td>DOWN</td>
+<td>NA</td>
+<td>UP</td>
+<td>ON</td>
+<td>NONE</td>
 <td>NA</td>
 <td>NA</td>
-<td>OFF</td>
 <td>NA</td>
-<td>OFF</td>
 <td>NA</td>
 <td>3.3</td>
 </tr>
@@ -4355,7 +4355,7 @@ Generate output files:
 </tr>
 <tr>
 <td class="label">49/3</td>
-<td>audio</td>
+<td>sound</td>
 <td>out</td>
 <td>IOR49[A]</td>
 <td>-</td>

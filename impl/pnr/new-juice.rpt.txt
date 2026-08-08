@@ -12,27 +12,27 @@
   <Part Number>: GW2AR-LV18QN88C8/I7
   <Device>: GW2AR-18
   <Device Version>: C
-  <Created Time>:Sat Aug  8 11:45:29 2026
+  <Created Time>:Sat Aug  8 11:53:45 2026
 
 
 2. PnR Details
 
   Running placement:
-    Placement Phase 0: CPU time = 0h 0m 0.832s, Elapsed time = 0h 0m 0.832s
-    Placement Phase 1: CPU time = 0h 0m 0.145s, Elapsed time = 0h 0m 0.145s
+    Placement Phase 0: CPU time = 0h 0m 0.837s, Elapsed time = 0h 0m 0.838s
+    Placement Phase 1: CPU time = 0h 0m 0.137s, Elapsed time = 0h 0m 0.137s
     Placement Phase 2: CPU time = 0h 0m 2s, Elapsed time = 0h 0m 2s
-    Placement Phase 3: CPU time = 0h 0m 9s, Elapsed time = 0h 0m 9s
+    Placement Phase 3: CPU time = 0h 0m 8s, Elapsed time = 0h 0m 8s
     Total Placement: CPU time = 0h 0m 12s, Elapsed time = 0h 0m 12s
  Running routing:
     Routing Phase 0: CPU time = 0h 0m 0.002s, Elapsed time = 0h 0m 0.002s
-    Routing Phase 1: CPU time = 0h 0m 0.156s, Elapsed time = 0h 0m 0.156s
-    Routing Phase 2: CPU time = 0h 0m 45s, Elapsed time = 0h 0m 45s
+    Routing Phase 1: CPU time = 0h 0m 0.157s, Elapsed time = 0h 0m 0.157s
+    Routing Phase 2: CPU time = 0h 0m 27s, Elapsed time = 0h 0m 27s
     Routing Phase 3: CPU time = 0h 0m 0s, Elapsed time = 0h 0m 0s
-    Total Routing: CPU time = 0h 0m 45s, Elapsed time = 0h 0m 45s
+    Total Routing: CPU time = 0h 0m 27s, Elapsed time = 0h 0m 27s
  Generate output files:
-    CPU time = 0h 0m 0.754s, Elapsed time = 0h 0m 0.756s
+    CPU time = 0h 0m 0.788s, Elapsed time = 0h 0m 0.791s
 
- Total Time and Memory Usage: CPU time = 0h 0m 58s, Elapsed time = 0h 0m 58s, Peak memory usage = 579MB
+ Total Time and Memory Usage: CPU time = 0h 0m 39s, Elapsed time = 0h 0m 39s, Peak memory usage = 582MB
 
 
 3. Resource Usage Summary
@@ -40,15 +40,15 @@
   --------------------------------------------------------------------------------
   Resources                   | Usage                               | Utilization
   --------------------------------------------------------------------------------
-  Logic                       | 12565/20736                         |  61%
-    --LUT,ALU,ROM16           | 12019(10718 LUT, 1301 ALU, 0 ROM16) | -
+  Logic                       | 12764/20736                         |  62%
+    --LUT,ALU,ROM16           | 12218(10916 LUT, 1302 ALU, 0 ROM16) | -
     --SSRAM(RAM16)            | 91                                  | -
   Register                    | 8227/15915                          |  52%
     --Logic Register as Latch | 0/15552                             |  0%
     --Logic Register as FF    | 8158/15552                          |  53%
     --I/O Register as Latch   | 0/363                               |  0%
     --I/O Register as FF      | 69/363                              |  19%
-  CLS                         | 8964/10368                          |  87%
+  CLS                         | 8961/10368                          |  87%
   I/O Port                    | 51/66                               |  78%
   I/O Buf                     | 47                                  | -
     --Input Buf               | 16                                  | -
@@ -76,8 +76,8 @@
   bank 0   | 8/8         | 100%        
   bank 1   | 6/9         | 67%         
   bank 2   | 0/4         | 0%          
-  bank 3   | 14/17       | 83%         
-  bank 4   | 7/8         | 88%         
+  bank 3   | 13/17       | 77%         
+  bank 4   | 8/8         | 100%        
   bank 5   | 9/10        | 90%         
   bank 6   | 6/9         | 67%         
   bank 7   | 1/1         | 100%        
@@ -107,7 +107,7 @@
   cpu_clkin_d    | LW             |  -
   board_reset_release| LW             |  -
   board_enabled  | LW             |  -
-  psg_filter_history[0]_ER_init_374| LW             |  -
+  psg_filter_history[0]_ER_init_353| LW             |  -
   sms_clk_54_raw | LW             |  -
   reg_con[0]_ER_init| LW             |  -
   hdmi_audio_clk_raw| LW             |  -
@@ -175,8 +175,8 @@ O_sdram_dqm[0]    | -         | p14/7         | -          | out   | IOL12[A] | 
 O_sdram_dqm[1]    | -         | p76/2         | -          | out   | IOR11[A] | -               | LVTTL33    | -     | UP        | -         | -          | -          | -          | -               | -             | -         
 O_sdram_dqm[2]    | -         | p29/7         | -          | out   | IOL18[A] | -               | LVTTL33    | -     | UP        | -         | -          | -          | -          | -               | -             | -         
 O_sdram_dqm[3]    | -         | p61/2         | -          | out   | IOR15[B] | -               | LVTTL33    | -     | UP        | -         | -          | -          | -          | -               | -             | -         
-audio             | -         | 49/3          | Y          | out   | IOR49[A] | -               | LVCMOS33   | 4     | DOWN      | NA        | NA         | OFF        | NA         | OFF             | NA            | 3.3       
-sound             | -         | 53/3          | Y          | out   | IOR38[B] | DOUT/WE_N       | LVCMOS33   | 4     | DOWN      | NA        | NA         | OFF        | NA         | OFF             | NA            | 3.3       
+audio             | -         | 41/4          | Y          | out   | IOB43[A] | -               | LVCMOS33   | 4     | DOWN      | NA        | NA         | OFF        | NA         | NA              | NA            | 3.3       
+sound             | -         | 49/3          | Y          | out   | IOR49[A] | -               | LVCMOS33   | 4     | DOWN      | NA        | NA         | OFF        | NA         | OFF             | NA            | 3.3       
 led               | -         | 86/0          | Y          | out   | IOT4[A]  | -               | LVCMOS33   | 8     | UP        | NA        | NA         | OFF        | NA         | NA              | NA            | 3.3       
 int_out           | -         | 73/1          | Y          | io    | IOT40[A] | -               | LVCMOS33   | 8     | UP        | NA        | NA         | OFF        | NA         | NA              | NA            | 3.3       
 cd[0]             | -         | 48/3          | Y          | io    | IOR49[B] | -               | LVCMOS33   | 8     | UP        | NA        | NONE       | OFF        | NA         | OFF             | NA            | 3.3       
@@ -268,7 +268,7 @@ Loc./Bank| Signal            | Dir.  | Site     | CFG             | IO Type  | D
 39/4     | tmds_data_p[2]    | out   | IOB40[A] | -               | LVCMOS33D | 8     | NONE      | NA        | NA         | NA         | NA         | NA              | NA            | 3.3  
 40/4     | tmds_data_n[2]    | out   | IOB40[B] | -               | LVCMOS33D | 8     | NONE      | NA        | NA         | NA         | NA         | NA              | NA            | 3.3  
 42/4     | wait_out          | out   | IOB42[B] | -               | LVCMOS33 | 8     | DOWN      | NA        | NA         | OFF        | NA         | NA              | NA            | 3.3  
-41/4     | -                 | in    | IOB43[A] | -               | LVCMOS33 | NA    | UP        | ON        | NONE       | NA         | NA         | NA              | NA            | 3.3  
+41/4     | audio             | out   | IOB43[A] | -               | LVCMOS33 | 4     | DOWN      | NA        | NA         | OFF        | NA         | NA              | NA            | 3.3  
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 p1/7     | IO_sdram_dq[0]    | io    | IOL3[A]  | -               | LVTTL33  | -     | UP        | -         | -          | -          | -          | -               | -             | -    
 p2/7     | IO_sdram_dq[1]    | io    | IOL3[B]  | -               | LVTTL33  | -     | UP        | -         | -          | -          | -          | -               | -             | -    
@@ -350,12 +350,12 @@ p52/2    | IO_sdram_dq[29]   | io    | IOR18[B] | -               | LVTTL33  | -
 56/3     | cd[1]             | io    | IOR36[A] | SO/D1           | LVCMOS33 | 8     | UP        | NA        | NONE       | OFF        | NA         | OFF             | NA            | 3.3  
 55/3     | cd[7]             | io    | IOR36[B] | SSPI_CS_N/D0    | LVCMOS33 | 8     | UP        | NA        | NONE       | OFF        | NA         | OFF             | NA            | 3.3  
 54/3     | cd[2]             | io    | IOR38[A] | DIN/CLKHOLD_N   | LVCMOS33 | 8     | UP        | NA        | NONE       | OFF        | NA         | OFF             | NA            | 3.3  
-53/3     | sound             | out   | IOR38[B] | DOUT/WE_N       | LVCMOS33 | 4     | DOWN      | NA        | NA         | OFF        | NA         | OFF             | NA            | 3.3  
+53/3     | -                 | in    | IOR38[B] | DOUT/WE_N       | LVCMOS33 | NA    | UP        | ON        | NONE       | NA         | NA         | NA              | NA            | 3.3  
 52/3     | datadir           | out   | IOR39[A] | SCLK            | LVCMOS33 | 8     | UP        | NA        | NA         | OFF        | NA         | OFF             | NA            | 3.3  
 p49/3    | IO_sdram_dq[30]   | io    | IOR44[A] | -               | LVTTL33  | -     | UP        | -         | -          | -          | -          | -               | -             | -    
 p48/3    | IO_sdram_dq[31]   | io    | IOR44[B] | -               | LVTTL33  | -     | UP        | -         | -          | -          | -          | -               | -             | -    
 51/3     | cd[6]             | io    | IOR45[A] | RPLL2_T_in      | LVCMOS33 | 8     | UP        | NA        | NONE       | OFF        | NA         | OFF             | NA            | 3.3  
-49/3     | audio             | out   | IOR49[A] | -               | LVCMOS33 | 4     | DOWN      | NA        | NA         | OFF        | NA         | OFF             | NA            | 3.3  
+49/3     | sound             | out   | IOR49[A] | -               | LVCMOS33 | 4     | DOWN      | NA        | NA         | OFF        | NA         | OFF             | NA            | 3.3  
 48/3     | cd[0]             | io    | IOR49[B] | -               | LVCMOS33 | 8     | UP        | NA        | NONE       | OFF        | NA         | OFF             | NA            | 3.3  
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ==============================================================================================================================================================================================
