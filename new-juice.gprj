@@ -8,7 +8,7 @@
         <File path="src/cd_demux.v" type="file.verilog" enable="1"/>
         <File path="src/clockdiv.v" type="file.verilog" enable="1"/>
         <File path="src/cpu_step_debugger.v" type="file.verilog" enable="1"/>
-        <File path="src/audio_drive.v" type="file.verilog" enable="1"/>
+        <File path="src/pwm_audio.v" type="file.verilog" enable="1"/>
         <File path="src/crc16.v" type="file.verilog" enable="1"/>
         <File path="src/dpram.v" type="file.verilog" enable="1"/>
         <File path="src/flash_roms.v" type="file.verilog" enable="1"/>

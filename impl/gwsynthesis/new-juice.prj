@@ -7,7 +7,7 @@
         <File path="/Users/felipe/src/fpga/new-juice/src/cd_demux.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/clockdiv.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/cpu_step_debugger.v" type="verilog"/>
-        <File path="/Users/felipe/src/fpga/new-juice/src/audio_drive.v" type="verilog"/>
+        <File path="/Users/felipe/src/fpga/new-juice/src/pwm_audio.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/crc16.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/dpram.v" type="verilog"/>
         <File path="/Users/felipe/src/fpga/new-juice/src/flash_roms.v" type="verilog"/>

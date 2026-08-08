@@ -7,11 +7,6 @@ module top
     input   s1,
     input   s2,
 
-    output hp_ws,
-    output hp_din,
-    output hp_bck,
-    output pa_en,
-
     output tmds_clk_p,
     output tmds_clk_n,
     output [2:0] tmds_data_p,
@@ -22,7 +17,7 @@ module top
     input wr_n_in,
     input sltsl_n_in,
 
-    output int_out,
+    inout int_out,
     output busdir_n,
     output wait_out,
     output datadir,
@@ -58,6 +53,9 @@ module top
     output [10:0] O_sdram_addr,     // 11 bit multiplexed address bus
     output [1:0] O_sdram_ba,        // two banks
     output [3:0] O_sdram_dqm,      // 32/4
+
+    output audio,
+    output sound,
 
     output led
 
@@ -278,12 +276,7 @@ module top
     reg [3:0] cpu_modules_ready_count = 4'd0;
     reg cpu_modules_ready_reg = 1'b0;
 
-    wire audio_bclk_raw;
-    wire audio_bclk_rise;
-    wire audio_req;
-    wire audio_hp_bck;
-    wire audio_hp_ws;
-    wire audio_hp_din;
+    wire audio_sample_clock;
     wire signed [15:0] psg_audio_sample;
     wire signed [15:0] opll_audio_sample;
     wire signed [15:0] jt51_audio_sample;
@@ -293,79 +286,28 @@ module top
     wire signed [10:0] jt89_sound;
     wire signed [15:0] jt89_audio_sample;
     wire signed [17:0] audio_mix_wide;
+    wire signed [17:0] sound_mix_wide;
     wire [15:0] mixed_audio_sample;
+    wire [15:0] mixed_sound_sample;
     reg [15:0] audio_sample_hold = 16'd0;
+    reg [15:0] sound_sample_hold = 16'd0;
     (* syn_preserve = 1, ASYNC_REG = "TRUE" *)
-    reg [1:0] audio_req_sync = 2'b00;
-    reg audio_req_sync_d = 1'b0;
+    reg [2:0] audio_sample_clock_sync = 3'b000;
 
-    // Diagnostic switches. Keep the audio logic running while its physical
-    // pins remain static to distinguish an RTL problem from reconfiguration
-    // behavior on the dual-purpose SSPI pins.
-    localparam AUDIO_LOGIC_ENABLED = 1'b1;
-    localparam AUDIO_BCK_ENABLED = 1'b1;
-    localparam AUDIO_WS_ENABLED = 1'b1;
-    localparam AUDIO_WS_IDLE_HIGH = 1'b0;
-    localparam AUDIO_DIN_ENABLED = 1'b1;
-    localparam AUDIO_PA_ENABLED = 1'b1;
     localparam INCLUDE_OPLL = 1'b1;
 
-    generate
-        if (AUDIO_LOGIC_ENABLED) begin : audio_logic_enabled
-            clockdiv #(
-                .CLK_HZ(27_000_000),
-                .OUT_HZ(705_600)
-            ) audio_clock_divider (
-                .clk_src(clk),
-                .reset_n(board_reset_n),
-                .clk_div(audio_bclk_raw),
-                .clk_rise(audio_bclk_rise)
-            );
-
-            audio_drive audio_drive_inst (
-                .clk(clk),
-                .bit_enable(audio_bclk_rise),
-                .bit_clock(audio_bclk_raw),
-                .rst_n(board_reset_n),
-                .idata(audio_sample_hold),
-                .req(audio_req),
-                .HP_BCK(audio_hp_bck),
-                .HP_WS(audio_hp_ws),
-                .HP_DIN(audio_hp_din)
-            );
-        end else begin : audio_logic_disabled
-            assign audio_bclk_raw = 1'b0;
-            assign audio_bclk_rise = 1'b0;
-            assign audio_req = 1'b0;
-            assign audio_hp_bck = 1'b0;
-            assign audio_hp_ws = 1'b0;
-            assign audio_hp_din = 1'b0;
-        end
-
-        if (AUDIO_BCK_ENABLED) begin : audio_bck_enabled
-            assign hp_bck = audio_hp_bck;
-        end else begin : audio_bck_disabled
-            assign hp_bck = 1'b0;
-        end
-
-        if (AUDIO_WS_ENABLED) begin : audio_ws_enabled
-            assign hp_ws = audio_hp_ws;
-        end else begin : audio_ws_disabled
-            assign hp_ws = AUDIO_WS_IDLE_HIGH;
-        end
-
-        if (AUDIO_DIN_ENABLED) begin : audio_din_enabled
-            assign hp_din = audio_hp_din;
-        end else begin : audio_din_disabled
-            assign hp_din = 1'b0;
-        end
-
-        if (AUDIO_PA_ENABLED) begin : audio_pa_enabled
-            assign pa_en = 1'b1;
-        end else begin : audio_pa_disabled
-            assign pa_en = 1'b0;
-        end
-    endgenerate
+    // The older board has two independent one-bit analogue audio paths rather
+    // than the serial headphone DAC. This clock controls when a coherent
+    // sample is captured; each PWM accumulator itself runs at 108 MHz.
+    clockdiv #(
+        .CLK_HZ(27_000_000),
+        .OUT_HZ(44_100)
+    ) audio_sample_clock_divider (
+        .clk_src(clk),
+        .reset_n(board_reset_n),
+        .clk_div(audio_sample_clock),
+        .clk_rise()
+    );
     
     // main pll
     wire main_clk;
@@ -430,24 +372,40 @@ module top
         .I(sms_clk_54_raw)
     );
 
-    // audio_req is asserted for one audio bit-clock cycle before audio_drive
-    // loads idata. Synchronize that request into the 108 MHz domain and take
-    // one coherent snapshot of the mix. The holding register then remains
-    // stable for far longer than the audio-domain setup/hold requirement.
+    // Synchronize the 44.1 kHz sample clock into the mixer/PWM domain and
+    // capture both mixes on the same edge. The separate holding registers let
+    // the two physical outputs use different chip mixes later.
     always_ff @(posedge main_clk or negedge board_reset_n)
     begin
         if (!board_reset_n) begin
-            audio_req_sync <= 2'b00;
-            audio_req_sync_d <= 1'b0;
+            audio_sample_clock_sync <= 3'b000;
             audio_sample_hold <= 16'd0;
+            sound_sample_hold <= 16'd0;
         end else begin
-            audio_req_sync <= {audio_req_sync[0], audio_req};
-            audio_req_sync_d <= audio_req_sync[1];
+            audio_sample_clock_sync <=
+                {audio_sample_clock_sync[1:0], audio_sample_clock};
 
-            if (audio_req_sync[1] && !audio_req_sync_d)
+            if (audio_sample_clock_sync[1] &&
+                !audio_sample_clock_sync[2]) begin
                 audio_sample_hold <= mixed_audio_sample;
+                sound_sample_hold <= mixed_sound_sample;
+            end
         end
     end
+
+    pwm_audio audio_pwm_inst (
+        .clk(main_clk),
+        .reset_n(board_reset_n),
+        .sample(audio_sample_hold),
+        .pwm(audio)
+    );
+
+    pwm_audio sound_pwm_inst (
+        .clk(main_clk),
+        .reset_n(board_reset_n),
+        .sample(sound_sample_hold),
+        .pwm(sound)
+    );
 
     wire [7:0] a_lo;
     wire [7:0] a_hi;
@@ -875,7 +833,17 @@ module top
     // JT89 is intentionally attenuated by one bit relative to the other
     // sources before entering the shared mix.
     assign jt89_audio_sample = {{2{jt89_sound[10]}}, jt89_sound, 3'b00};
+    // Keep the two board outputs as independent mixes. They intentionally
+    // start with identical source lists; remove or rescale terms in only one
+    // expression when a chip should be excluded from that physical path.
     assign audio_mix_wide =
+        {{2{psg_audio_sample[15]}}, psg_audio_sample} +
+        {{2{opll_audio_sample[15]}}, opll_audio_sample} +
+        {{3{jt51_audio_sample[15]}}, jt51_audio_sample[15:1]} +
+        {{2{scc_audio_sample[15]}}, scc_audio_sample} +
+        {{2{jt89_audio_sample[15]}}, jt89_audio_sample} +
+        {{2{keyclick_audio_sample[15]}}, keyclick_audio_sample};
+    assign sound_mix_wide =
         {{2{psg_audio_sample[15]}}, psg_audio_sample} +
         {{2{opll_audio_sample[15]}}, opll_audio_sample} +
         {{3{jt51_audio_sample[15]}}, jt51_audio_sample[15:1]} +
@@ -886,6 +854,7 @@ module top
     // Reducing the complete mix by 6 dB then guarantees 16-bit headroom
     // without changing the established levels of the other sources.
     assign mixed_audio_sample = audio_mix_wide[16:1];
+    assign mixed_sound_sample = sound_mix_wide[16:1];
 
     // ---------------------------------------------------------------------
     // Franky / Sega Master System VDP and PSG
@@ -1884,15 +1853,14 @@ module top
         .enabled(native_sdram_enabled)
     );
 
-    // Franky's VDP interrupt is active low; the external cartridge signal is
-    // driven active high by the board-level inverter below.
-    // Franky's VDP supplies an active-low interrupt. int_out drives the
-    // board-level inverter below, matching WonderTANG's external polarity.
+    // This older board has no interrupt inverter transistor. Emulate its
+    // open-collector output by pulling cartridge /INT low only while asserted
+    // and releasing the shared line otherwise.
     assign int_n =
         (sms_reset_n ? sms_vdp_irq_n : 1'b1) &&
         (opll_module_reset_n ? jt51_irq_n : 1'b1);
 
-    assign int_out = ~int_n;
+    assign int_out = int_n ? 1'bz : 1'b0;
     assign wait_out = ~wait_n;
 
     // Before the SDRAM test passes, preserve its failure-code blinker.
