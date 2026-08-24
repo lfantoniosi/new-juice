@@ -1861,7 +1861,7 @@ module top
         (sms_reset_n ? sms_vdp_irq_n : 1'b1) &&
         (opll_module_reset_n ? jt51_irq_n : 1'b1);
 
-    assign int_out = int_n ? 1'bz : 1'b0;
+    assign int_out = int_n ? 1'b1 : 1'b0;
     assign wait_out = ~wait_n;
 
     // Before the SDRAM test passes, preserve its failure-code blinker.
